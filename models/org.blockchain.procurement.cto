@@ -18,25 +18,140 @@
 
 namespace org.blockchain.procurement
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
+/**
+ * The type of perishable product being shipped
+ */
+enum ProductType {
+  o CHAIR
+  o TABLE
+  o PEN
+  o PENCIL
+  o COFFEE
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
+/**
+ * The status of a shipment
+ */
+enum ShipmentStatus {
+  o CREATED
+  o IN_TRANSIT
+  o ARRIVED
 }
 
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
+/**
+ * An abstract transaction that is related to a Shipment
+ */
+transaction ShipmentTransaction {
+  --> Shipment shipment
 }
 
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
+
+/**
+ * A notification that a shipment has been received by the
+ * importer and that funds should be transferred from the importer
+ * to the grower to pay for the shipment.
+ */
+
+
+
+
+asset Request identified by requestId {
+  o String requestId
+  o ProductType type
+  --> Faculty faculty
+  --> Department department
+  o DateTime reqDateTime
+  o Double quantity
 }
+
+
+asset Tenderreq identified by trequestId {
+  o String trequestId
+  o ProductType type
+  --> Shop shop
+  --> Department department
+  o DateTime reqDateTime
+  o Double quantity
+  --> Request requestId
+}
+
+
+
+asset Tenderrep identified by treplyId {
+  o String treplyId
+  o ProductType type
+  --> Shop shop
+  --> Department department
+  o Long quantity
+  o Long price
+  --> Tenderreq trequestId
+}
+
+/**
+ * Defines a contract between a Grower and an Importer to ship using
+ * a Shipper, paying a set unit price. The unit price is multiplied by
+ * a penality factor proportional to the deviation from the min and max
+ * negociated temperatures for the shipment.
+ */
+asset Tender identified by tenderId {
+  o String tenderId
+  --> Shop shop
+  --> Faculty faculty
+  --> Department department
+  o DateTime arrivalDateTime
+  o Double unitPrice
+  --> Tenderrep treplyId
+}
+
+
+/**
+ * A shipment being tracked as an asset on the ledger
+ */
+asset Shipment identified by shipmentId {
+  o String shipmentId
+  o ProductType type
+  o ShipmentStatus status
+  o Long unitCount
+  --> Tender tenderId
+}
+/**
+ * A concept for a simple street address
+ */
+concept Address {
+  o String city 
+  o String street optional
+  o String zip 
+}
+
+/**
+ * An abstract participant type in this business network
+ */
+abstract participant Business identified by email {
+  o String email
+  o Address address
+}
+
+/**
+ * A Grower is a type of participant in the network
+ */
+participant Faculty extends Business {
+}
+
+/**
+ * A Shipper is a type of participant in the network
+ */
+participant Department extends Business {
+}
+
+/**
+ * An Importer is a type of participant in the network
+ */
+participant Shop extends Business {
+}
+
+/**
+ * JUST FOR INITIALIZING A DEMO
+ */
+transaction SetupDemo {
+}
+
