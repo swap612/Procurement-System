@@ -48,12 +48,14 @@ typings/
 
 # Optional eslint cache
 .eslintcache
-
+.editorconfig
 # Optional REPL history
 .node_repl_history
-
+.npmignore
 # Output of 'npm pack'
 *.tgz
+.eslintignore
+.eslintrc.js
 
 # Yarn Integrity file
 .yarn-integrity
@@ -75,3 +77,8 @@ typings/
 
 # Serverless directories
 .serverless
+.git
+
+.idea
+
+.vscode
