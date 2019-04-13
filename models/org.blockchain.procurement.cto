@@ -1,26 +1,5 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Write your model definitions here
- */
-
 namespace org.blockchain.procurement
 
-/**
- * The type of perishable product being shipped
- */
 enum ProductType {
   o CHAIR
   o TABLE
@@ -29,152 +8,119 @@ enum ProductType {
   o COFFEE
 }
 
-/**
- * The status of a shipment
- */
 enum ShipmentStatus {
   o CREATED
   o IN_TRANSIT
   o ARRIVED
 }
 
-/**
- * An abstract transaction that is related to a Shipment
- */
-transaction ShipmentTransaction {
-  --> Shipment shipment
+enum Status {
+ o DENIED
+ o APPROVED
+ o CREATED
+ o COMPLETED
 }
 
-
-/**
- * A notification that a shipment has been received by the
- * importer and that funds should be transferred from the importer
- * to the grower to pay for the shipment.
- */
-
-
-
-
-asset Request identified by requestId {
-  o String requestId
-  o ProductType type
-  --> Faculty faculty
-  --> Department department
-  o DateTime reqDateTime
-  o Double quantity
-}
-
-
-asset Tenderreq identified by trequestId {
-  o String trequestId
-  o ProductType type
-  --> Shop shop
-  --> Department department
-  o DateTime reqDateTime
-  o Double quantity
-  --> Request requestId
-}
-
-
-
-asset Tenderrep identified by treplyId {
-  o String treplyId
-  o ProductType type
-  --> Shop shop
-  --> Department department
-  o Long quantity
-  o Long price
-  --> Tenderreq trequestId
-}
-
-/**
- * Defines a contract between a Grower and an Importer to ship using
- * a Shipper, paying a set unit price. The unit price is multiplied by
- * a penality factor proportional to the deviation from the min and max
- * negociated temperatures for the shipment.
- */
-asset Tender identified by tenderId {
-  o String tenderId
-  --> Shop shop
-  --> Faculty faculty
-  --> Department department
-  o DateTime arrivalDateTime
-  o Double unitPrice
-  --> Tenderrep treplyId
-}
-
-
-/**
- * A shipment being tracked as an asset on the ledger
- */
-asset Shipment identified by shipmentId {
-  o String shipmentId
-  o ProductType type
-  o ShipmentStatus status
-  o Long unitCount
-  --> Tender tenderId
-}
-/**
- * A concept for a simple street address
- */
 concept Address {
   o String city 
   o String street optional
   o String zip 
 }
 
-/**
- * An abstract participant type in this business network
- */
 abstract participant Business identified by email {
   o String email
+  o String name
   o Address address
 }
 
-/**
- * A Grower is a type of participant in the network
- */
 participant Faculty extends Business {
+  --> Department department
 }
 
-/**
- * A Shipper is a type of participant in the network
- */
 participant Department extends Business {
 }
 
-/**
- * An Importer is a type of participant in the network
- */
 participant Shop extends Business {
 }
 
-/**
- * JUST FOR INITIALIZING A DEMO
- */
-transaction SetupDemo {
+asset Request identified by requestId {
+  o String requestId
+  o ProductType type
+  o DateTime reqDateTime
+  o Double quantity
+  o Status status
+  --> Faculty faculty
+  --> Department department
+}
+
+transaction CreateRequest { // only accessible by faculty/student/admin
+  o ProductType type
+  o String ProductDescription optional
+  o Double quantity 
+}
+
+concept TenderRes { // single response by a seller looks like this (which will be one element in tenderres array inside Tenderreq
+  o Double bid
+  o String tenderresid
+  o String description optional
+  --> Shop shop
+  --> Tenderreq tenderreq
+}
+
+asset Tenderreq identified by trequestId {
+  o String trequestId
+  o ProductType type
+  o DateTime reqDateTime
+  o Double quantity
+  o Double ResponseCount
+  o TenderRes[] tenderres
+  --> Request requestId
+}
+
+transaction TenderreqGenerate {
+  o String requestId 
+}
+
+transaction SubmitBid {
+o String trequestId
+o String tenderresid
+o Double bid
+o String description optional
+}
+
+/*
+asset Tenderrep identified by treplyId {
+  o String treplyId
+  o ProductType type
+  o Long quantity
+  o Long price
+  --> Tenderreq trequestId
+  --> Shop shop
+  --> Department department
+} */
+
+asset Contract identified by ContractId {
+  o String ContractId
+  o String tenderresid
+  o DateTime arrivalDateTime
+  o Double unitPrice
+  --> Shop shop
+  --> Faculty faculty
+  --> Department department
+  --> Tenderreq trequestId
+}
+
+asset Shipment identified by shipmentId {
+  o String shipmentId
+  o ProductType type
+  o ShipmentStatus status
+  o Long unitCount
+  --> Contract ContractId
+}
+
+transaction ShipmentTransaction {
+  --> Shipment shipment
 }
 
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
-}
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
-}
-
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
-}
-
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
-}
