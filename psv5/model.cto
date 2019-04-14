@@ -1,0 +1,152 @@
+namespace org.blockchain.procurement
+
+enum ProductType {
+  o CHAIR
+  o TABLE
+  o PEN
+  o PENCIL
+  o COFFEE
+}
+
+asset requestidgenerator identified by reqidgen {
+ o String reqidgen
+ o String requestid 
+}
+
+
+enum ShipmentStatus {
+  o IN_TRANSIT
+  o ARRIVED
+}
+
+enum StatusTenderreq {
+o ACTIVE
+o COMPLETED
+}
+
+enum Status {
+ o DENIED
+ o APPROVED
+ o CREATED
+ o COMPLETED
+}
+
+concept Address {
+  o String city 
+  o String street optional
+  o String zip 
+}
+
+abstract participant Business identified by email {
+  o String email
+  o String name
+  o Address address
+}
+
+participant Faculty extends Business {
+
+}
+
+participant Department extends Business {
+}
+
+participant Shop extends Business {
+}
+
+asset Request identified by requestId {
+  o String requestId
+  o ProductType type
+  o DateTime reqDateTime
+  o Double quantity
+  o Status status
+  --> Faculty faculty
+}
+
+transaction CreateRequest { // only accessible by faculty/student/admin
+  o ProductType type
+  o String ProductDescription optional
+  o Double quantity 
+}
+
+concept TenderRes { // single response by a seller looks like this (which will be one element in tenderres array inside Tenderreq
+  o Double bid
+  o String tenderresid
+  o String description optional
+  --> Shop shop
+  --> Tenderreq tenderreq
+}
+
+
+asset Tenderreq identified by trequestId {
+  o String trequestId
+  o ProductType type
+  o DateTime reqDateTime
+  o Double quantity
+  o StatusTenderreq status
+  o Double ResponseCount
+  -->Shop ContractGivenTo optional
+  o TenderRes[] tenderres
+  --> Request requestId
+}
+
+transaction TenderreqGenerate {
+  o String requestId 
+}
+
+transaction SubmitBid {
+o String trequestId
+o String tenderresid
+o Double bid
+o String description optional
+}
+
+/*
+asset Tenderrep identified by treplyId {
+  o String treplyId
+  o ProductType type
+  o Long quantity
+  o Long price
+  --> Tenderreq trequestId
+  --> Shop shop
+  --> Department department
+} */
+
+asset Contract identified by ContractId {
+  o String ContractId
+  o String tenderresid optional
+  o DateTime arrivalDateTime optional
+  o Double unitPrice optional 
+  o Double totalAmount optional
+  --> Shop shop
+  --> Faculty faculty 
+  --> Tenderreq trequestId 
+}
+
+asset Shipment identified by shipmentId {
+  o String shipmentId
+  o ProductType type
+  o ShipmentStatus status
+  o Long unitCount
+  o Address address
+  --> Contract contract
+}
+
+transaction ShipmentTransaction {
+  o String shipmentId
+  --> Contract contract
+
+}
+
+transaction GiveContract {
+ --> Tenderreq tenderreq
+  o String shopId optional
+  o Boolean Automatic optional
+}
+
+transaction ShipmentRecieved {
+ --> Shipment shipmentRcvd
+}
+
+transaction setupEnv{
+  
+}
