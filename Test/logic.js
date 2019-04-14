@@ -236,7 +236,12 @@ async function ShipmentRecieved(ShipmentTxn) {
   ShipmentTxn.shipmentRcvd.status = 'ARRIVED' ; 
   ShipmentTxn.shipmentRcvd.contract.trequestId.status = 'COMPLETED';  
   ShipmentTxn.shipmentRcvd.contract.trequestId.requestId.status= 'COMPLETED'
-  const shipreg= await getAssetRegistry('org.blockchain.procurement.Shipment');
+  let shipreg= await getAssetRegistry('org.blockchain.procurement.Shipment');
   await shipreg.update(ShipmentTxn.shipmentRcvd);
+  shipreg= await getAssetRegistry('org.blockchain.procurement.Tenderreq');
+  await shipreg.update(ShipmentTxn.shipmentRcvd.contract.trequestId);
+  shipreg= await getAssetRegistry('org.blockchain.procurement.Request');
+  await shipreg.update(ShipmentTxn.shipmentRcvd.contract.trequestId.requestId);
+
 
 }
