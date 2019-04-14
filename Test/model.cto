@@ -77,7 +77,6 @@ concept TenderRes { // single response by a seller looks like this (which will b
 }
 
 
-
 asset Tenderreq identified by trequestId {
   o String trequestId
   o ProductType type
@@ -148,3 +147,6 @@ transaction ShipmentRecieved {
  --> Shipment shipmentRcvd
 }
 
+transaction setupEnv{
+  
+}
