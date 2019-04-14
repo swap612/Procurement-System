@@ -246,3 +246,43 @@ async function ShipmentRecieved(ShipmentTxn) {
 
 }
 
+
+/**
+* SetUp Environment
+* @param {org.blockchain.procurement.setupEnv} env
+* @transaction 
+*/
+
+async function setupEnv(env) {
+     var NS='org.blockchain.procurement';
+     var factory= getFactory();
+    /* let DeptAssest = factory.newResource(NS,'Department','101');
+     DeptAssest.name = 'PROCUREMENT' ;
+     DeptAssest.address.city='MUMBAI';
+     DeptAssest.address.zip='410101';
+  	const dept= await getAssetRegistry('org.blockchain.procurement.Department');
+    await dept.add(DeptAssest);
+  */
+  
+   let FacAssest = factory.newResource(NS,'Faculty','2000');
+     FacAssest.name = 'Sandeep Shukla' ;
+  
+      var addrConcept = factory.newConcept('org.blockchain.procurement.Faculty', 'address');
+     //addrConcept.city='KANPUR';
+    // addrConcept.zip='200101';
+  	FacAssest.Address = addrConcept ;
+  
+  const fac= await getAssetRegistry('org.blockchain.procurement.Faculty');
+    await fac.add(FacAssest);
+  /*
+  let ShopAssest = factory.newResource(NS,'Shop','2000');
+     ShopAssest.name = 'LALA Traders' ;
+     ShopAssest.address.city='LUCKNOW';
+     ShopAssest.address.zip='208101';
+
+  const shop = await getAssetRegistry('org.blockchain.procurement.Shop');
+    await shop.add(ShopAssest);*/
+  
+
+}
+

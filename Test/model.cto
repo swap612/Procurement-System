@@ -8,7 +8,6 @@ enum ProductType {
   o COFFEE
 }
 
-
 asset requestidgenerator identified by reqidgen {
  o String reqidgen
  o String requestid 
@@ -16,9 +15,13 @@ asset requestidgenerator identified by reqidgen {
 
 
 enum ShipmentStatus {
-  o CREATED
   o IN_TRANSIT
   o ARRIVED
+}
+
+enum StatusTenderreq {
+o ACTIVE
+o COMPLETED
 }
 
 enum Status {
@@ -41,7 +44,7 @@ abstract participant Business identified by email {
 }
 
 participant Faculty extends Business {
-  --> Department department
+
 }
 
 participant Department extends Business {
@@ -57,7 +60,6 @@ asset Request identified by requestId {
   o Double quantity
   o Status status
   --> Faculty faculty
-  --> Department department
 }
 
 transaction CreateRequest { // only accessible by faculty/student/admin
@@ -74,12 +76,15 @@ concept TenderRes { // single response by a seller looks like this (which will b
   --> Tenderreq tenderreq
 }
 
+
 asset Tenderreq identified by trequestId {
   o String trequestId
   o ProductType type
   o DateTime reqDateTime
   o Double quantity
+  o StatusTenderreq status
   o Double ResponseCount
+  -->Shop ContractGivenTo optional
   o TenderRes[] tenderres
   --> Request requestId
 }
@@ -108,14 +113,13 @@ asset Tenderrep identified by treplyId {
 
 asset Contract identified by ContractId {
   o String ContractId
-  o String tenderresid
-  o DateTime arrivalDateTime
-  o Double unitPrice
-  o Double totalAmount
+  o String tenderresid optional
+  o DateTime arrivalDateTime optional
+  o Double unitPrice optional 
+  o Double totalAmount optional
   --> Shop shop
-  --> Faculty faculty
-  --> Department department
-  --> Tenderreq trequestId
+  --> Faculty faculty 
+  --> Tenderreq trequestId 
 }
 
 asset Shipment identified by shipmentId {
@@ -123,16 +127,26 @@ asset Shipment identified by shipmentId {
   o ProductType type
   o ShipmentStatus status
   o Long unitCount
-  --> Contract ContractId
+  o Address address
+  --> Contract contract
 }
 
 transaction ShipmentTransaction {
-  --> Shipment shipment
+  o String shipmentId
+  --> Contract contract
+
 }
 
 transaction GiveContract {
-  o String trequestId
-  o String shopId
-  o Boolean Automatic
+ --> Tenderreq tenderreq
+  o String shopId optional
+  o Boolean Automatic optional
 }
 
+transaction ShipmentRecieved {
+ --> Shipment shipmentRcvd
+}
+
+transaction setupEnv{
+  
+}
