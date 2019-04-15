@@ -141,7 +141,7 @@ rule shopC {
 rule shopD {
   description:  "System ACL to permit all access"
   participant: "org.blockchain.procurement.Shop"
-  operation: ALL
+  operation: CREATE
   resource: "org.blockchain.procurement.TenderRes"
   action: ALLOW
 }
@@ -205,5 +205,4 @@ rule NetworkAdminSystem {
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
-
 
