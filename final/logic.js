@@ -86,7 +86,11 @@ async function createRequest(createRequest) {
     var seller=getCurrentParticipant();
     const assetregistry = await getAssetRegistry('org.blockchain.procurement.Tenderreq'); // to check if a person has already placed a bid, if yes return back
     const targettender= await assetregistry.get(SubmitBid.trequestId.getIdentifier());
-
+	
+     if(targettender.status=='COMPLETED') 
+    return console.log('Contract closed');
+    
+    
     var factory= getFactory();		
     var NS='org.blockchain.procurement';
     var tenderress= factory.newResource(NS,'TenderRes',(targettender.getIdentifier()+seller.getIdentifier()));
