@@ -20,7 +20,7 @@ enum ProductType {
   o FAN
   o PRINTER
   o SCANNER
-  o FPGA BOARDS
+  o FPGA_BOARDS
   o PROJECTOR
 }
 
