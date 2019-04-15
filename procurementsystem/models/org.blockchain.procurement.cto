@@ -15,11 +15,13 @@
 namespace org.blockchain.procurement
 
 enum ProductType {
-  o CHAIR
-  o TABLE
-  o PEN
-  o PENCIL
-  o COFFEE
+  o FURNITURE
+  o LAPTOPS
+  o FAN
+  o PRINTER
+  o SCANNER
+  o FPGA BOARDS
+  o PROJECTOR
 }
 
 
