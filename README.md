@@ -1,6 +1,6 @@
 # procurement-system
 
-&#34;Procurement System for college&#34;
+&#34;Procurement System for college using the HyperLedger Blockchain&#34;
 
 
 1> Creating Business Network Archive  
