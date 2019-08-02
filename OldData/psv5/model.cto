@@ -1,29 +1,12 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 namespace org.blockchain.procurement
 
 enum ProductType {
-  o FURNITURE
-  o LAPTOPS
-  o FAN
-  o PRINTER
-  o SCANNER
-  o FPGA_BOARDS
-  o PROJECTOR
+  o CHAIR
+  o TABLE
+  o PEN
+  o PENCIL
+  o COFFEE
 }
-
 
 asset requestidgenerator identified by reqidgen {
  o String reqidgen
@@ -85,13 +68,14 @@ transaction CreateRequest { // only accessible by faculty/student/admin
   o Double quantity 
 }
 
-asset TenderRes identified by tenderresid{ // single response by a seller looks like this (which will be one element in tenderres array inside Tenderreq
+concept TenderRes { // single response by a seller looks like this (which will be one element in tenderres array inside Tenderreq
   o Double bid
   o String tenderresid
   o String description optional
   --> Shop shop
   --> Tenderreq tenderreq
 }
+
 
 asset Tenderreq identified by trequestId {
   o String trequestId
@@ -100,30 +84,42 @@ asset Tenderreq identified by trequestId {
   o Double quantity
   o StatusTenderreq status
   o Double ResponseCount
-  --> Shop ContractGivenTo optional
-  --> TenderRes[] tenderres
+  -->Shop ContractGivenTo optional
+  o TenderRes[] tenderres
   --> Request requestId
 }
 
 transaction TenderreqGenerate {
-  --> Request requestId 
+  o String requestId 
 }
 
 transaction SubmitBid {
--->Tenderreq trequestId
+o String trequestId
+o String tenderresid
 o Double bid
 o String description optional
 }
 
+/*
+asset Tenderrep identified by treplyId {
+  o String treplyId
+  o ProductType type
+  o Long quantity
+  o Long price
+  --> Tenderreq trequestId
+  --> Shop shop
+  --> Department department
+} */
+
 asset Contract identified by ContractId {
   o String ContractId
-  o DateTime arrivalDateTime 
-  o Double unitPrice  
-  o Double totalAmount 
+  o String tenderresid optional
+  o DateTime arrivalDateTime optional
+  o Double unitPrice optional 
+  o Double totalAmount optional
   --> Shop shop
   --> Faculty faculty 
-  --> Tenderreq trequestId
-  --> TenderRes tenderresid 
+  --> Tenderreq trequestId 
 }
 
 asset Shipment identified by shipmentId {
@@ -132,7 +128,6 @@ asset Shipment identified by shipmentId {
   o ShipmentStatus status
   o Long unitCount
   o Address address
-  o Double TotalAmount
   --> Contract contract
 }
 
@@ -143,11 +138,10 @@ transaction ShipmentTransaction {
 }
 
 transaction GiveContract {
-  --> Tenderreq tenderreq
-  --> Shop shopId 
-  o Boolean Automatic 
+ --> Tenderreq tenderreq
+  o String shopId optional
+  o Boolean Automatic optional
 }
-
 
 transaction ShipmentRecieved {
  --> Shipment shipmentRcvd
@@ -156,4 +150,3 @@ transaction ShipmentRecieved {
 transaction setupEnv{
   
 }
-
