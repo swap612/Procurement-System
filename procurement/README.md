@@ -59,13 +59,13 @@ In the last property .scrollable-menu update max-height to 500px.
 2. ``` $ npm start ```  
 3. Open the [link: http://localhost:4202/](http://localhost:4202/) to see the GUI.
 
-IV. Steps to test the Application
-1> Faculty will run the CreateRequest transaction to place an request.
-2> Department will run the TenderreqGenerate transaction to validate and create tender request for all traders.
-3> Each trader will submit the bid by runninng SubmitBid transaction.
-4> Department will run the GiveContact where it will ask the shopId to explicitly give the contract or else if Automatic option is set true, it will automatically select the minimum bid.
-5> Winner Trader now call the ShipmentTransaction to ship the product. 
-6> In Last faculty will run ShipmentReceived transaction to acknowledge the delivery.
-
+**IV. Steps to test the Application**  
+1. Faculty will run the CreateRequest transaction to place an request.  
+2. Department will run the TenderreqGenerate transaction to validate and create tender request for all traders.
+3. Each trader will submit the bid by runninng SubmitBid transaction.
+4. Department will run the GiveContact where it will ask the shopId to explicitly give the contract or else if Automatic option is set true, it will automatically select the minimum bid.  
+5. Winner Trader now call the ShipmentTransaction to ship the product.   
+6. In Last faculty will run ShipmentReceived transaction to acknowledge the delivery.   
+  
 NOTE: For request, tenderreq and shop ID enter the complete reference like "resource:org.blockchain.procurement.Shop#ID"
 
