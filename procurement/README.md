@@ -39,21 +39,25 @@ I. Steps to setup:
 	$ composer-playground  
 ```
 
-II. Steps to create the different identities of the network
-1> In composer playground, create the Participants(1 department, faculty and traders).
-2> Generate identity corresponding to each participant from ID Registry, it will generate cards corresponding to each participant.
-3> Goto Test tab and click Submit Transaction and call setupEnv.
+**II. Steps to create the different identities of the network**  
 
-III. Steps to generate the Angular GUI for each participant
-1> Goto project folder, type command
-	$yo
-	Then enter the details like project name, card name(for each participant), rest server port, etc.
-	It will generate a folder project_name, update the port number(--port 4202 ) in package.json file. Assign different port to each participant.
-	Modify Line 20: "start": "concurrently \"ng serve --proxy-config proxy.conf.js --host 0.0.0.0 --port 4202 \" \"npm run api\"".
-	To see all the entries in Angular GUI. Modify the ./src/app/app.component.css file
-	In the last property .scrollable-menu update max-height to 500px. 
-2> run $npm start
-3> Open the link: http://localhost:4202/ to see the GUI.
+1. In composer playground, create the Participants(1 department, faculty and traders).  
+2. Generate identity corresponding to each participant from ID Registry, it will generate cards corresponding to each participant.  
+3. Goto Test tab and click Submit Transaction and call setupEnv.  
+
+**III. Steps to generate the Angular GUI for each participant**  
+1. Goto project folder, type command  
+```	
+	$ yo
+```  
+Then enter the details like project name, card name(for each participant), rest server port, etc.
+It will generate a folder project_name, update the port number(--port 4202 ) in package.json file. Assign different port to each participant.  
+Modify Line 20: "start": "concurrently \"ng serve --proxy-config proxy.conf.js --host 0.0.0.0 --port 4202 \" \"npm run api\"".
+<br>To see all the entries in Angular GUI. Modify the ./src/app/app.component.css file
+In the last property .scrollable-menu update max-height to 500px.  
+	
+2. ``` $ npm start ```  
+3. Open the [link: http://localhost:4202/](http://localhost:4202/) to see the GUI.
 
 IV. Steps to test the Application
 1> Faculty will run the CreateRequest transaction to place an request.
