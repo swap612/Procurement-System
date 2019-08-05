@@ -69,4 +69,4 @@ In the last property .scrollable-menu update max-height to 500px.
   
 NOTE: For request, tenderreq and shop ID enter the complete reference like "resource:org.blockchain.procurement.Shop#ID"
 
-[Demo Link](https://www.youtube.com/watch?v=p3itCawHO64)
+[Youtube Demo Link](https://www.youtube.com/watch?v=p3itCawHO64)
